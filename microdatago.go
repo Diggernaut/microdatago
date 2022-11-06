@@ -16,7 +16,7 @@ import (
 // Parser is an HTML parser that extracts microdata
 type Parser struct {
 	r         io.Reader
-	Microdata map[string]interface{}
+	Microdata []map[string]interface{}
 	baseURL   *url.URL
 }
 
@@ -34,9 +34,8 @@ func (p *Parser) JSON() ([]byte, error) {
 // baseURL is the base URL for resolving relative URLs
 func NewParser(r io.Reader, baseURL *url.URL) *Parser {
 	return &Parser{
-		r:         r,
-		Microdata: nil,
-		baseURL:   baseURL,
+		r:       r,
+		baseURL: baseURL,
 	}
 }
 
@@ -82,10 +81,11 @@ func (p *Parser) Parse() error {
 	}
 
 	// Parsing DOM with microdata to the object
-	p.Microdata = make(map[string]interface{})
 	selector = dom.ChildrenFiltered("*")
 	selector.Each(func(i int, s *goquery.Selection) {
-		p.extractItem(s, p.Microdata)
+		item := make(map[string]interface{})
+		p.extractItem(s, item)
+		p.Microdata = append(p.Microdata, item)
 	})
 
 	return nil
