@@ -9,8 +9,8 @@ import (
 	"strings"
 	"unicode"
 
-	"github.com/Diggernaut/cast"
-	"github.com/Diggernaut/goquery"
+	"github.com/diggernaut/cast"
+	"github.com/diggernaut/goquery"
 )
 
 // Parser is an HTML parser that extracts microdata
